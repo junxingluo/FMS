@@ -1,0 +1,46 @@
+# Log Management Service
+
+This file includes two parts of explains:
+
+1. How to compile the package.
+2. How to launch the service.
+3. How to setup a debug environment.
+
+## How to compile the package
+The package is written in JAVA in compliance with JAVA 6 standard, but can be compiled with any JAVA version higher than JAVA 6. As such, JAVA is the first dependency that is required. I recommand JAVA 8 or 9 because JAVA 6 is really old.
+
+From a Ubuntu system, this can be done by issuing
+	sudo apt-get install openjdk-8-jdk
+
+The dependencies of the project is managed by Apache Maven. One of the plugin that will be talked about in the following section only works with Maven3 so it is recommanded. Ubuntu 14.04 repository comes with Maven 2. The following commands will install Maven 3 instead:
+
+	sudo apt-get purge maven maven2 maven3
+	sudo apt-add-repository ppa:andrei-pozolotin/maven3
+	sudo apt-get update
+	sudo apt-get install maven3
+
+Next, you need GIT to download the project.
+
+	sudo apt-get install git
+
+Follow the guide from Bitbucket to setup your local git repository of the project.
+
+Next you can try to compile the project. Navigate to the project root folder and issue
+
+	mvn compile
+
+If the command finishes without giving any error, that means the project is compiled successfully. Now we can try to package it:
+
+	mvn package
+
+The command should package the whole project as well as dependencies into a *.war* file. This file can be used for deployment later.
+
+### FAQ
+
+*Q: An error message appears during compiling the project: "ClassNotFoundException: xxx", what is wrong?*
+
+A: Likely, some dependencies are missing. The most common case is that the dependency API is added, but there is no implementation dependency of that API. You need to search the missing class on google or maven central repository to try to find an implementation dependency, and add it to pom.xml.
+
+*Q: An error message appears during compiling the project: "Unsupported Major.minor version: xx.x", what is wrong?*
+
+A: This message appears when the JAVA version used is lower than the JAVA version of the class. For example, a project dependency is compiled with JAVA 9, but the local JAVA is version 8. It can also happen when Jetty is using JAVA 6, but the project is compiled with JAVA 8. 
